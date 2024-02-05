@@ -16,15 +16,15 @@ FROM alpine:3.19
 RUN mkdir -p /home/app
 WORKDIR /home/app
 RUN apk --no-cache add \
-		libc-dev \
-		xz \
-		samurai \
-		git \
-		cmake \
-		perl-utils \
-		jq \
-		curl
-# Install python framework along with its dependency packages 
+	libc-dev \
+	xz \
+	samurai \
+	git \
+	cmake \
+	perl-utils \
+	jq \
+	curl
+# Install python framework along with its dependency packages
 RUN apk --no-cache add g++ make python3 py3-pip
 
 # Create a virtual environment and install required packages
@@ -32,3 +32,6 @@ RUN python3 -m venv ~/pyvenv --system-site-packages && \
 	~/pyvenv/bin/pip3 install s3cmd
 
 COPY --from=builder /deps/local/ /deps/local/
+
+RUN export PATH=$PATH:/deps/local && \
+	ln -s /deps/local/zig /usr/bin/zig
